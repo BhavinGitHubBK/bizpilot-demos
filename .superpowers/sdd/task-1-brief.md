@@ -1,0 +1,128 @@
+﻿### Task 1: Rewrite launcher markup
+
+**Files:**
+- Modify: `index.html`
+- Test: structure checks via PowerShell `Select-String`
+
+**Interfaces:**
+- Consumes: existing demo image paths and demo URLs
+- Produces: DOM hooks `.hero`, `.lookbook`, `.lookbook-row`, `.lookbook-row.is-visible` (class toggled later by JS)
+
+- [ ] **Step 1: Replace `index.html` with the new structure**
+
+Overwrite `index.html` with:
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Choose from three premium BizPilot business website demos.">
+  <meta name="theme-color" content="#0c0e12">
+  <title>BizPilot â€” Choose a Business Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/launcher.css">
+  <script src="assets/js/launcher.js" defer></script>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-atmosphere" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <a class="brand" href="index.html" aria-label="BizPilot home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 44 44" width="56" height="56">
+            <defs>
+              <linearGradient id="logoFace" x1="5" y1="3" x2="39" y2="42" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#fff"/>
+                <stop offset="1" stop-color="#c8d4e7"/>
+              </linearGradient>
+            </defs>
+            <rect x="1" y="1" width="42" height="42" rx="12" fill="url(#logoFace)"/>
+            <path d="M12 27.5V21a2.5 2.5 0 0 1 5 0v6.5a2.5 2.5 0 0 1-5 0Z" fill="#0A0E15"/>
+            <path d="M19.5 27.5V14.8a2.5 2.5 0 0 1 5 0v12.7a2.5 2.5 0 0 1-5 0Z" fill="#0A0E15"/>
+            <path d="M27 27.5v-9.2a2.5 2.5 0 0 1 5 0v9.2a2.5 2.5 0 0 1-5 0Z" fill="#0A0E15"/>
+            <path d="M11.5 34c7.8 2.8 15 1.8 21-3" fill="none" stroke="#657996" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="33.5" cy="30.4" r="1.7" fill="#57D892"/>
+          </svg>
+        </span>
+        <span class="brand-copy">
+          <strong>BizPilot</strong>
+          <small>Business Demo Platform</small>
+        </span>
+      </a>
+      <h1 class="hero-title">Business demos, ready to explore</h1>
+      <p class="hero-support">Explore one of three curated website experiences.</p>
+      <a class="scroll-cue" href="#lookbook">
+        <span>View demos</span>
+        <span class="scroll-cue-icon" aria-hidden="true"></span>
+      </a>
+    </div>
+  </header>
+
+  <main id="lookbook" class="lookbook">
+    <p class="lookbook-kicker">Curated experiences</p>
+    <h2 class="lookbook-heading">Choose a demo</h2>
+
+    <a class="lookbook-row legal" href="advocate-demo/index.html" target="_blank" rel="noopener noreferrer">
+      <div class="lookbook-media">
+        <img src="advocate-demo/assets/images/lady-justice-hero.png" width="960" height="660" alt="Lady Justice representing the Rajan Legal Associates website" loading="lazy">
+      </div>
+      <div class="lookbook-copy">
+        <p class="lookbook-category">Professional Services</p>
+        <h3>Rajan Legal Associates</h3>
+        <span class="lookbook-cta">Open demo <i aria-hidden="true">â†’</i></span>
+      </div>
+    </a>
+
+    <a class="lookbook-row zivara" href="jewellery-demo/index.html" target="_blank" rel="noopener noreferrer">
+      <div class="lookbook-media">
+        <img src="jewellery-demo/assets/images/hero/jewellery-hero.png" width="960" height="660" alt="Luxury jewellery representing the Zivara website" loading="lazy">
+      </div>
+      <div class="lookbook-copy">
+        <p class="lookbook-category">Luxury Commerce</p>
+        <h3>Zivara</h3>
+        <span class="lookbook-cta">Open demo <i aria-hidden="true">â†’</i></span>
+      </div>
+    </a>
+
+    <a class="lookbook-row freshbasket" href="kirana-demo/index.html" target="_blank" rel="noopener noreferrer">
+      <div class="lookbook-media">
+        <img src="kirana-demo/assets/images/banners/freshbasket-hero.png" width="960" height="660" alt="Fresh groceries representing the FreshBasket Mart website" loading="lazy">
+      </div>
+      <div class="lookbook-copy">
+        <p class="lookbook-category">Everyday Commerce</p>
+        <h3>FreshBasket Mart</h3>
+        <span class="lookbook-cta">Open demo <i aria-hidden="true">â†’</i></span>
+      </div>
+    </a>
+  </main>
+
+  <footer class="site-footer">
+    <span>Â© 2026 BizPilot</span>
+    <span>Digital experiences for modern businesses.</span>
+  </footer>
+</body>
+</html>
+```
+
+- [ ] **Step 2: Verify required structure exists**
+
+Run from repo root:
+
+```powershell
+Select-String -Path index.html -Pattern 'class="hero"|id="lookbook"|lookbook-row legal|lookbook-row zivara|lookbook-row freshbasket|advocate-demo/index.html|jewellery-demo/index.html|kirana-demo/index.html' | ForEach-Object { $_.Line.Trim() }
+```
+
+Expected: matches for hero, lookbook id, three rows, and all three demo hrefs.
+
+- [ ] **Step 3: Commit**
+
+```powershell
+git add index.html
+git commit -m "Rebuild launcher markup for dark hero and lookbook."
+```
+
+---
