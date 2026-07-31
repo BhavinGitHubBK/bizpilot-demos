@@ -2,7 +2,7 @@ ZIVARA BEAUTY & JEWELLERY — COMPLETE ECOMMERCE DEMO
 
 OPEN
 Open index.html directly, or use:
-http://localhost/bizpilot-2/bizpilot-demos/jewellery-demo/
+http://localhost/bizpilot-demos/jewellery-demo/
 
 No installation, framework, database or build command is required.
 
