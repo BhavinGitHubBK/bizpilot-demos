@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Choose from three premium BizPilot business website demos.">
-  <meta name="theme-color" content="#0c0e12">
+  <meta name="theme-color" content="#0b0d11">
   <title>BizPilot &mdash; Choose a Business Demo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,12 +13,13 @@
   <script src="assets/js/launcher.js" defer></script>
 </head>
 <body>
-  <header class="hero">
-    <div class="hero-atmosphere" aria-hidden="true"></div>
-    <div class="hero-inner">
+  <div class="stage-glow" aria-hidden="true"></div>
+
+  <main class="stage">
+    <header class="stage-header">
       <a class="brand" href="index.html" aria-label="BizPilot home">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 44 44" width="56" height="56">
+          <svg viewBox="0 0 44 44" width="48" height="48">
             <defs>
               <linearGradient id="logoFace" x1="5" y1="3" x2="39" y2="42" gradientUnits="userSpaceOnUse">
                 <stop stop-color="#fff"/>
@@ -38,56 +39,52 @@
           <small>Business Demo Platform</small>
         </span>
       </a>
-      <h1 class="hero-title">Business demos, ready to explore</h1>
-      <p class="hero-support">Explore one of three curated website experiences.</p>
-      <a class="scroll-cue" href="#lookbook">
-        <span>View demos</span>
-        <span class="scroll-cue-icon" aria-hidden="true"></span>
+      <div class="intro">
+        <p class="intro-kicker">Curated experiences</p>
+        <h1>Choose a business demo</h1>
+        <p class="intro-support">Explore one of three ready-to-view website experiences.</p>
+      </div>
+    </header>
+
+    <section class="demo-grid" aria-label="BizPilot business demos">
+      <a class="demo-card legal is-visible" href="advocate-demo/index.html" target="_blank" rel="noopener noreferrer">
+        <div class="card-image">
+          <img src="advocate-demo/assets/images/lady-justice-hero.png" width="720" height="495" alt="Lady Justice representing the Rajan Legal Associates website">
+        </div>
+        <div class="card-body">
+          <p class="card-category">Professional Services</p>
+          <h2>Rajan Legal Associates</h2>
+          <span class="card-cta">Open demo <i aria-hidden="true">&rarr;</i></span>
+        </div>
       </a>
-    </div>
-  </header>
 
-  <main id="lookbook" class="lookbook">
-    <p class="lookbook-kicker">Curated experiences</p>
-    <h2 class="lookbook-heading">Choose a demo</h2>
+      <a class="demo-card zivara is-visible" href="jewellery-demo/index.html" target="_blank" rel="noopener noreferrer">
+        <div class="card-image">
+          <img src="jewellery-demo/assets/images/hero/jewellery-hero.png" width="720" height="495" alt="Luxury jewellery representing the Zivara website">
+        </div>
+        <div class="card-body">
+          <p class="card-category">Luxury Commerce</p>
+          <h2>Zivara</h2>
+          <span class="card-cta">Open demo <i aria-hidden="true">&rarr;</i></span>
+        </div>
+      </a>
 
-    <a class="lookbook-row legal" href="advocate-demo/index.html" target="_blank" rel="noopener noreferrer">
-      <div class="lookbook-media">
-        <img src="advocate-demo/assets/images/lady-justice-hero.png" width="960" height="660" alt="Lady Justice representing the Rajan Legal Associates website" loading="lazy">
-      </div>
-      <div class="lookbook-copy">
-        <p class="lookbook-category">Professional Services</p>
-        <h3>Rajan Legal Associates</h3>
-        <span class="lookbook-cta">Open demo <i aria-hidden="true">&rarr;</i></span>
-      </div>
-    </a>
+      <a class="demo-card freshbasket is-visible" href="kirana-demo/index.html" target="_blank" rel="noopener noreferrer">
+        <div class="card-image">
+          <img src="kirana-demo/assets/images/banners/freshbasket-hero.png" width="720" height="495" alt="Fresh groceries representing the FreshBasket Mart website">
+        </div>
+        <div class="card-body">
+          <p class="card-category">Everyday Commerce</p>
+          <h2>FreshBasket Mart</h2>
+          <span class="card-cta">Open demo <i aria-hidden="true">&rarr;</i></span>
+        </div>
+      </a>
+    </section>
 
-    <a class="lookbook-row zivara" href="jewellery-demo/index.html" target="_blank" rel="noopener noreferrer">
-      <div class="lookbook-media">
-        <img src="jewellery-demo/assets/images/hero/jewellery-hero.png" width="960" height="660" alt="Luxury jewellery representing the Zivara website" loading="lazy">
-      </div>
-      <div class="lookbook-copy">
-        <p class="lookbook-category">Luxury Commerce</p>
-        <h3>Zivara</h3>
-        <span class="lookbook-cta">Open demo <i aria-hidden="true">&rarr;</i></span>
-      </div>
-    </a>
-
-    <a class="lookbook-row freshbasket" href="kirana-demo/index.html" target="_blank" rel="noopener noreferrer">
-      <div class="lookbook-media">
-        <img src="kirana-demo/assets/images/banners/freshbasket-hero.png" width="960" height="660" alt="Fresh groceries representing the FreshBasket Mart website" loading="lazy">
-      </div>
-      <div class="lookbook-copy">
-        <p class="lookbook-category">Everyday Commerce</p>
-        <h3>FreshBasket Mart</h3>
-        <span class="lookbook-cta">Open demo <i aria-hidden="true">&rarr;</i></span>
-      </div>
-    </a>
+    <footer class="site-footer">
+      <span>&copy; 2026 BizPilot</span>
+      <span>Digital experiences for modern businesses.</span>
+    </footer>
   </main>
-
-  <footer class="site-footer">
-    <span>&copy; 2026 BizPilot</span>
-    <span>Digital experiences for modern businesses.</span>
-  </footer>
 </body>
 </html>
