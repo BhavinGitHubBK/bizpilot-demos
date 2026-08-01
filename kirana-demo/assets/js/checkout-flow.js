@@ -39,13 +39,209 @@ function renderCheckout(){
  form.addEventListener("click",event=>{const button=event.target.closest("button");if(!button)return;if(button.dataset.next!==undefined&&validate(step))show(step+1);if(button.dataset.back!==undefined)show(step-1);if(button.dataset.goStep!==undefined&&Number(button.dataset.goStep)<step)show(Number(button.dataset.goStep));});
  form.addEventListener("submit",event=>{event.preventDefault();if(!validate(5))return;const fd=new FormData(form),delivery=type()==="delivery",sum=totals(),now=new Date(),order={number:`FBM2026${String(Date.now()).slice(-6)}`,createdAt:now.toISOString(),displayDate:now.toLocaleString("en-IN"),deliveryType:delivery?"Home delivery":"Pickup",fulfilment:delivery?"delivery":"pickup",customer:{mode:fd.get("customerMode"),email:$("#email").value,name:delivery?$("#fullName").value:$("#pickupName").value,mobile:delivery?$("#mobile").value:$("#pickupMobile").value},address:delivery?{fullName:$("#fullName").value,mobile:$("#mobile").value,alternate:$("#alternate").value,house:$("#house").value,building:$("#building").value,street:$("#street").value,area:$("#area").value,landmark:$("#landmark").value,city:$("#city").value,state:$("#state").value,pin:$("#pincode").value,type:$("#addressType").value,instructions:$("#instructions").value}:null,pickup:delivery?null:{point:fd.get("pickupPoint"),distance:pickupPoints.find(row=>row[0]===fd.get("pickupPoint"))?.[1]||"",contact:$("#pickupName").value,mobile:$("#pickupMobile").value},date:$("#orderDate").value,slot:$("#orderSlot").value,paymentMethod:fd.get("payment"),paymentStatus:fd.get("payment")==="Cash on Delivery"?"Pay on delivery":"Simulated payment successful",products:cart().map(row=>({...row,name:product(row.id).name,image:product(row.id).image,weight:product(row.id).weight,price:product(row.id).sellingPrice,mrp:product(row.id).mrp})),totals:sum};
  try{store.set("fb-latest-order",order);store.set("fb-last-order",order);const history=store.get("fb-order-history",[]);store.set("fb-order-history",[order,...history.filter(item=>item.number!==order.number)]);store.set("fb-order",order.number);store.set("fb-cart",[]);window.FreshBasketHeader?.syncCounts();location.href="order-confirmation.html";}catch(error){ui.toast("We could not save your order. Your cart has not been cleared.");}});
+ $$("select.form-control",form).forEach(enhanceCheckoutSelect);
+ enhanceCheckoutDate($("#orderDate",form));
  toggleAddress();show(0);
+}
+function enhanceCheckoutDate(input){
+ if(!input||input.dataset.coDateEnhanced==="1")return;
+ input.dataset.coDateEnhanced="1";
+ const field=input.closest(".co-field");
+ const min=input.min?new Date(input.min+"T00:00:00"):new Date();
+ min.setHours(0,0,0,0);
+ const pad=n=>String(n).padStart(2,"0");
+ const toValue=date=>`${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
+ const toLabel=value=>{
+  if(!value)return"Choose a date";
+  const [y,m,d]=value.split("-").map(Number);
+  return new Date(y,m-1,d).toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+ };
+ const widget=document.createElement("div");
+ widget.className="co-date";
+ input.parentNode.insertBefore(widget,input);
+ widget.appendChild(input);
+ input.classList.add("co-date-native");
+ input.tabIndex=-1;
+ const trigger=document.createElement("button");
+ trigger.type="button";
+ trigger.className="co-date-trigger";
+ trigger.setAttribute("aria-haspopup","dialog");
+ trigger.setAttribute("aria-expanded","false");
+ trigger.innerHTML=`<span class="co-date-icon"><i class="fa-regular fa-calendar"></i></span><span data-co-date-label>${esc(toLabel(input.value))}</span><i class="fa-solid fa-chevron-down co-date-chevron" aria-hidden="true"></i>`;
+ const panel=document.createElement("div");
+ panel.className="co-date-panel";
+ panel.hidden=true;
+ panel.setAttribute("role","dialog");
+ panel.setAttribute("aria-label","Choose delivery date");
+ widget.append(trigger,panel);
+ const label=$("[data-co-date-label]",trigger);
+ let view=input.value?new Date(input.value+"T00:00:00"):new Date(min);
+ const close=()=>{widget.classList.remove("is-open");trigger.setAttribute("aria-expanded","false");panel.hidden=true};
+ const open=()=>{
+  $$(".co-select.is-open,.co-date.is-open").forEach(node=>{
+   if(node===widget)return;
+   node.classList.remove("is-open");
+   const menu=$(".co-select-menu,.co-date-panel",node);
+   if(menu)menu.hidden=true;
+   $(".co-select-trigger,.co-date-trigger",node)?.setAttribute("aria-expanded","false");
+  });
+  view=input.value?new Date(input.value+"T00:00:00"):new Date(min);
+  render();
+  widget.classList.add("is-open");
+  trigger.setAttribute("aria-expanded","true");
+  panel.hidden=false;
+ };
+ const choose=value=>{
+  input.value=value;
+  label.textContent=toLabel(value);
+  widget.classList.add("has-value");
+  field?.classList.remove("has-error");
+  input.dispatchEvent(new Event("input",{bubbles:true}));
+  input.dispatchEvent(new Event("change",{bubbles:true}));
+  close();
+  trigger.focus();
+ };
+ const render=()=>{
+  const year=view.getFullYear(),month=view.getMonth();
+  const first=new Date(year,month,1);
+  const start=new Date(first);
+  start.setDate(1-first.getDay());
+  const monthLabel=view.toLocaleDateString("en-IN",{month:"long",year:"numeric"});
+  let days="";
+  for(let i=0;i<42;i++){
+   const day=new Date(start);
+   day.setDate(start.getDate()+i);
+   const value=toValue(day);
+   const inMonth=day.getMonth()===month;
+   const disabled=day<min;
+   const selected=input.value===value;
+   const today=toValue(new Date())===value;
+   days+=`<button type="button" class="co-date-day${inMonth?"":" is-muted"}${selected?" is-selected":""}${today?" is-today":""}" data-date="${value}" ${disabled?"disabled":""}>${day.getDate()}</button>`;
+  }
+  panel.innerHTML=`<div class="co-date-head"><button type="button" class="co-date-nav" data-nav="-1" aria-label="Previous month"><i class="fa-solid fa-chevron-left"></i></button><b>${esc(monthLabel)}</b><button type="button" class="co-date-nav" data-nav="1" aria-label="Next month"><i class="fa-solid fa-chevron-right"></i></button></div><div class="co-date-week"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div><div class="co-date-grid">${days}</div><div class="co-date-foot"><button type="button" data-today>Today</button><button type="button" data-clear>Clear</button></div>`;
+  $$("[data-nav]",panel).forEach(btn=>btn.onclick=()=>{view=new Date(year,month+Number(btn.dataset.nav),1);render();});
+  $$(".co-date-day:not([disabled])",panel).forEach(btn=>btn.onclick=()=>choose(btn.dataset.date));
+  $("[data-today]",panel).onclick=()=>{
+   const today=new Date();today.setHours(0,0,0,0);
+   if(today<min){ui.toast("Earliest available date is already selected.");return;}
+   choose(toValue(today));
+  };
+  $("[data-clear]",panel).onclick=()=>{
+   input.value="";
+   label.textContent="Choose a date";
+   widget.classList.remove("has-value");
+   input.dispatchEvent(new Event("input",{bubbles:true}));
+   input.dispatchEvent(new Event("change",{bubbles:true}));
+   close();
+  };
+ };
+ trigger.onclick=()=>widget.classList.contains("is-open")?close():open();
+ document.addEventListener("pointerdown",event=>{if(!widget.contains(event.target))close();});
+ document.addEventListener("keydown",event=>{if(event.key==="Escape"&&widget.classList.contains("is-open")){close();trigger.focus();}});
+ if(input.value)widget.classList.add("has-value");
+}
+function enhanceCheckoutSelect(select){
+ if(!select||select.dataset.coEnhanced==="1")return;
+ select.dataset.coEnhanced="1";
+ const icons={
+  "Choose a slot":"fa-clock",
+  "8–10 AM":"fa-sun",
+  "10 AM–12 PM":"fa-cloud-sun",
+  "2–4 PM":"fa-mug-hot",
+  "7–9 PM":"fa-moon",
+  Home:"fa-house",
+  Work:"fa-briefcase",
+  Other:"fa-location-dot",
+  Gujarat:"fa-map"
+ };
+ const field=select.closest(".co-field");
+ const widget=document.createElement("div");
+ widget.className="co-select";
+ select.parentNode.insertBefore(widget,select);
+ widget.appendChild(select);
+ select.classList.add("co-select-native");
+ select.tabIndex=-1;
+ select.setAttribute("aria-hidden","true");
+ const selected=select.options[select.selectedIndex];
+ const trigger=document.createElement("button");
+ trigger.type="button";
+ trigger.className="co-select-trigger";
+ trigger.setAttribute("aria-haspopup","listbox");
+ trigger.setAttribute("aria-expanded","false");
+ trigger.innerHTML=`<span class="co-select-icon"><i class="fa-solid ${icons[selected?.text]||"fa-chevron-down"}"></i></span><span data-co-label>${esc(selected?.text||"Choose")}</span><i class="fa-solid fa-chevron-down co-select-chevron" aria-hidden="true"></i>`;
+ const menu=document.createElement("div");
+ menu.className="co-select-menu";
+ menu.hidden=true;
+ menu.setAttribute("role","listbox");
+ [...select.options].forEach(option=>{
+  if(!option.value&&option.text==="Choose a slot"){
+   // keep placeholder in trigger only
+  }
+  const item=document.createElement("button");
+  item.type="button";
+  item.className="co-select-option";
+  item.dataset.value=option.value;
+  item.setAttribute("role","option");
+  item.setAttribute("aria-selected",String(option.selected));
+  if(!option.value)item.dataset.placeholder="1";
+  item.innerHTML=`<i class="fa-solid ${icons[option.text]||"fa-circle"}" aria-hidden="true"></i><span>${esc(option.text)}</span><i class="fa-solid fa-check" aria-hidden="true"></i>`;
+  menu.appendChild(item);
+ });
+ widget.append(trigger,menu);
+ const label=trigger.querySelector("[data-co-label]");
+ const icon=$(".co-select-icon i",trigger);
+ const items=$$(".co-select-option",menu);
+ const sync=()=>{
+  const option=select.options[select.selectedIndex];
+  label.textContent=option?.text||"Choose";
+  icon.className=`fa-solid ${icons[option?.text]||"fa-chevron-down"}`;
+  widget.classList.toggle("has-value",!!select.value);
+  items.forEach(node=>node.setAttribute("aria-selected",String(node.dataset.value===select.value)));
+  field?.classList.toggle("has-error",false);
+ };
+ const close=()=>{widget.classList.remove("is-open");trigger.setAttribute("aria-expanded","false");menu.hidden=true};
+ const open=()=>{
+  $$(".co-select.is-open").forEach(node=>{if(node!==widget){node.classList.remove("is-open");$(".co-select-menu",node).hidden=true;$(".co-select-trigger",node)?.setAttribute("aria-expanded","false");}});
+  widget.classList.add("is-open");
+  trigger.setAttribute("aria-expanded","true");
+  menu.hidden=false;
+  (items.find(item=>item.getAttribute("aria-selected")==="true")||items[0])?.focus();
+ };
+ const choose=item=>{
+  select.value=item.dataset.value;
+  sync();
+  select.dispatchEvent(new Event("input",{bubbles:true}));
+  select.dispatchEvent(new Event("change",{bubbles:true}));
+  close();
+  trigger.focus();
+ };
+ trigger.onclick=()=>widget.classList.contains("is-open")?close():open();
+ items.forEach((item,index)=>{
+  item.onclick=()=>choose(item);
+  item.onkeydown=event=>{
+   if(event.key==="ArrowDown"){event.preventDefault();items[(index+1)%items.length].focus();}
+   else if(event.key==="ArrowUp"){event.preventDefault();items[(index-1+items.length)%items.length].focus();}
+   else if(event.key==="Enter"||event.key===" "){event.preventDefault();choose(item);}
+   else if(event.key==="Escape"){close();trigger.focus();}
+  };
+ });
+ document.addEventListener("pointerdown",event=>{if(!widget.contains(event.target))close();});
+ sync();
 }
 function renderConfirmation(){
  if(!confirmation)return;const order=store.get("fb-latest-order",null);if(!order){confirmation.innerHTML=`<div class="container"><section class="co-panel co-empty"><i class="fa-regular fa-file-lines"></i><h1>No recent order found</h1><p>Complete checkout to see your order confirmation.</p><a class="btn btn-primary" href="shop.html">Continue Shopping</a></section></div>`;return;}
  const destination=order.fulfilment==="pickup"?`${order.pickup.point} pickup point · ${order.pickup.distance}`:`${order.address.house}, ${order.address.building}, ${order.address.street}, ${order.address.area}, ${order.address.city} ${order.address.pin}`;
- confirmation.innerHTML=`<div class="container"><article class="oc-card"><header class="oc-hero"><div class="oc-success"><i class="fa-solid fa-check"></i></div><span class="eyebrow">Order confirmed</span><h1>Thank you for your order!</h1><p>Your order <b>${esc(order.number)}</b> has been saved successfully.</p></header><div class="oc-body"><div class="oc-meta"><div><small>Order number</small><b>${esc(order.number)}</b></div><div><small>Order date</small><b>${esc(order.displayDate)}</b></div><div><small>Type</small><b>${esc(order.deliveryType)}</b></div><div><small>Address / pickup</small><b>${esc(destination)}</b></div><div><small>Date and slot</small><b>${esc(order.date)} · ${esc(order.slot)}</b></div><div><small>Payment</small><b>${esc(order.paymentMethod)}</b></div></div><h2>Ordered products</h2><div class="oc-items">${order.products.map(item=>`<div class="oc-item"><img src="${item.image}" alt="${esc(item.name)}" onerror="imageFallback(this)"><div><b>${esc(item.name)}</b><small>${esc(item.weight)} × ${item.qty}</small></div><b>${money(item.price*item.qty)}</b></div>`).join("")}</div><div class="oc-total"><span>Total</span><b>${money(order.totals.finalTotal)}</b></div><div class="co-saving">You saved ${money(order.totals.totalSavings)} on this order</div><div class="oc-actions"><a class="btn btn-primary" href="track-order.html?order=${encodeURIComponent(order.number)}">Track Order</a><a class="btn btn-outline" href="order-details.html?order=${encodeURIComponent(order.number)}">View Order</a><button class="btn btn-outline" type="button" data-download-invoice><i class="fa-solid fa-download"></i> Download Invoice</button><a class="btn btn-outline" href="shop.html">Continue Shopping</a></div></div></article></div>`;
- $("[data-download-invoice]").addEventListener("click",()=>{const lines=[`FreshBasket Mart Invoice`,`Order: ${order.number}`,`Date: ${order.displayDate}`,`Type: ${order.deliveryType}`,`Destination: ${destination}`,"",...order.products.map(item=>`${item.name} | ${item.qty} × ${money(item.price)} = ${money(item.qty*item.price)}`),"",`Total: ${money(order.totals.finalTotal)}`,`Total savings: ${money(order.totals.totalSavings)}`,`Payment: ${order.paymentMethod}`],blob=new Blob([lines.join("\\r\\n")],{type:"text/plain"}),url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download=`${order.number}-invoice.txt`;link.click();setTimeout(()=>URL.revokeObjectURL(url),500);});
+ const invoiceRows=(order.products||[]).map(item=>`<tr><td><b>${esc(item.name)}</b><small>${esc(item.weight)}</small></td><td>${item.qty}</td><td>${money(item.price)}</td><td>${money(item.price*item.qty)}</td></tr>`).join("");
+ const t=order.totals||{};
+ confirmation.innerHTML=`<div class="container"><article class="oc-card no-print"><header class="oc-hero"><div class="oc-success"><i class="fa-solid fa-check"></i></div><span class="eyebrow">Order confirmed</span><h1>Thank you for your order!</h1><p>Your order <b>${esc(order.number)}</b> has been saved successfully.</p></header><div class="oc-body"><div class="oc-meta"><div><small>Order number</small><b>${esc(order.number)}</b></div><div><small>Order date</small><b>${esc(order.displayDate)}</b></div><div><small>Type</small><b>${esc(order.deliveryType)}</b></div><div><small>Address / pickup</small><b>${esc(destination)}</b></div><div><small>Date and slot</small><b>${esc(order.date)} · ${esc(order.slot)}</b></div><div><small>Payment</small><b>${esc(order.paymentMethod)}</b></div></div><h2>Ordered products</h2><div class="oc-items">${order.products.map(item=>`<div class="oc-item"><img src="${item.image}" alt="${esc(item.name)}" onerror="imageFallback(this)"><div><b>${esc(item.name)}</b><small>${esc(item.weight)} × ${item.qty}</small></div><b>${money(item.price*item.qty)}</b></div>`).join("")}</div><div class="oc-total"><span>Total</span><b>${money(t.finalTotal)}</b></div><div class="co-saving">You saved ${money(t.totalSavings)} on this order</div><div class="oc-actions"><a class="btn btn-primary" href="track-order.html?order=${encodeURIComponent(order.number)}">Track Order</a><a class="btn btn-outline" href="order-details.html?order=${encodeURIComponent(order.number)}">View Order</a><button class="btn btn-outline" type="button" data-download-invoice><i class="fa-solid fa-file-invoice"></i> Download Invoice</button><a class="btn btn-outline" href="shop.html">Continue Shopping</a></div></div></article>
+ <section class="oc-invoice" id="ocInvoice" aria-label="Order invoice"><div class="oc-invoice-sheet"><header class="oc-invoice-head"><div><b>FreshBasket</b><small>Mart · Tax Invoice</small></div><div class="oc-invoice-meta"><span>Invoice / Order</span><strong>${esc(order.number)}</strong><span>${esc(order.displayDate)}</span></div></header><div class="oc-invoice-grid"><div><small>Bill / Ship to</small><b>${esc(order.customer?.name||"Customer")}</b><span>${esc(order.customer?.mobile||"")}</span><span>${esc(destination)}</span></div><div><small>Delivery details</small><b>${esc(order.deliveryType)}</b><span>${esc(order.date)} · ${esc(order.slot)}</span><span>${esc(order.paymentMethod)}</span></div></div><table class="oc-invoice-table"><thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Amount</th></tr></thead><tbody>${invoiceRows}</tbody></table><div class="oc-invoice-totals"><div><span>Subtotal</span><b>${money(t.subtotal||0)}</b></div><div><span>Product discount</span><b>− ${money(t.productDiscount||0)}</b></div><div><span>Coupon</span><b>− ${money(t.couponDiscount||0)}</b></div><div><span>Delivery</span><b>${t.delivery?money(t.delivery):"FREE"}</b></div><div class="oc-invoice-grand"><span>Grand total</span><b>${money(t.finalTotal||0)}</b></div></div><footer class="oc-invoice-foot"><p>You saved ${money(t.totalSavings||0)} on this order.</p><small>Simulated invoice · FreshBasket Mart · No real payment processed</small></footer></div></section></div>`;
+ $("[data-download-invoice]").addEventListener("click",()=>{
+  const prev=document.title;
+  document.title=`FreshBasket Invoice ${order.number}`;
+  document.body.classList.add("oc-printing");
+  window.print();
+  setTimeout(()=>{document.body.classList.remove("oc-printing");document.title=prev;},400);
+ });
 }
 renderCheckout();renderConfirmation();
 })(window,document);

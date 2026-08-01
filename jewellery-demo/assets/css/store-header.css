@@ -2,66 +2,10 @@
 @media(max-width:1100px){.store-logo{min-width:175px}.store-search-wrap{max-width:390px}.store-wa span{display:none}.store-wa{width:45px;padding:0!important;display:grid!important;place-items:center}.nav-row{gap:20px}}
 @media(max-width:900px){.store-head{height:70px}.store-menu-toggle{display:grid!important}.store-search-wrap{display:none}.store-logo{min-width:0;margin-right:auto}.nav-row{display:none}.store-wa{display:none!important}.mobile-search-row{display:block;padding:10px 0;border-top:1px solid var(--line)}.mobile-search-row form{display:flex;height:44px;border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}.mobile-search-row input{flex:1;min-width:0;border:0;padding:0 14px}.mobile-search-row button{border:0;background:var(--wine);color:#fff;padding:0 17px}.store-icons{margin-left:0}}
 
-/* Premium WhatsApp concierge control */
-.store-wa{
-  min-height:50px;
-  margin-left:10px;
-  padding:0 19px 0 10px!important;
-  gap:10px!important;
-  border:1px solid rgba(210,145,123,.38)!important;
-  border-radius:16px!important;
-  background:linear-gradient(135deg,#4a0d22,#781b3b)!important;
-  box-shadow:0 11px 25px rgba(72,12,32,.2),inset 0 1px rgba(255,255,255,.09);
-  letter-spacing:.01em;
-}
-.store-head .store-wa svg{
-  width:32px!important;
-  height:32px!important;
-  min-width:32px!important;
-  max-width:32px!important;
-  max-height:32px!important;
-  padding:7px;
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:10px;
-  background:rgba(255,255,255,.1);
-  stroke:#fff!important;
-  transition:background .25s,border-color .25s,transform .25s;
-}
-.store-wa span{
-  position:relative;
-  padding-right:12px;
-  color:#fffaf7;
-  font-size:12px;
-  font-weight:800;
-  white-space:nowrap;
-}
-.store-wa span:after{
-  content:"";
-  position:absolute;
-  top:50%;
-  right:0;
-  width:6px;
-  height:6px;
-  border:2px solid rgba(255,255,255,.7);
-  border-radius:50%;
-  background:#29aa6a;
-  box-shadow:0 0 0 3px rgba(41,170,106,.14);
-  transform:translateY(-50%);
-}
-.store-wa:hover{
-  border-color:rgba(225,175,151,.72)!important;
-  background:linear-gradient(135deg,#5b1029,#8a2346)!important;
-  box-shadow:0 15px 32px rgba(72,12,32,.27),inset 0 1px rgba(255,255,255,.12);
-  transform:translateY(-2px);
-}
-.store-head .store-wa:hover svg{
-  border-color:rgba(92,221,151,.45);
-  background:#1f985d;
-  transform:scale(1.04);
-}
+/* Luxury WhatsApp concierge — refined in motion.css; keep compact breakpoint here */
 @media(max-width:1100px){
-  .store-wa{width:48px;min-height:48px;margin-left:5px;padding:0!important;border-radius:14px!important}
-  .store-head .store-wa svg{width:31px!important;height:31px!important;min-width:31px!important}
+  .store-wa{width:50px;min-height:50px;margin-left:5px;padding:0!important;border-radius:50%!important}
+  .store-head .store-wa .wa-copy{display:none}
 }
 @media(max-width:520px){.store-top{height:36px;gap:18px;font-size:9px;letter-spacing:.1em}.store-head{height:64px}.store-logo{font-size:24px}.store-logo-mark{width:35px;height:35px;padding:6px}.store-logo small{display:none}.action-icon{width:35px!important;height:35px}.action-icon svg{width:17px;height:17px}.store-icons .account-action{display:none!important}.store-shell{width:calc(100% - 24px)}}
 
@@ -241,4 +185,129 @@
 }
 .store-icons .action-icon > .motion-ripple {
   display: none !important;
+}
+
+/* Fixed header chrome so nav stays visible on all internal pages */
+.store-chrome {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  background: rgba(255, 249, 243, 0.98);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 5px 25px rgba(38, 8, 18, 0.08);
+  transition: box-shadow 0.28s ease;
+}
+.store-chrome .store-header {
+  position: relative !important;
+  top: auto !important;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.store-chrome .store-top {
+  max-height: 44px;
+  transition: max-height 0.28s ease, opacity 0.22s ease, transform 0.28s ease;
+}
+.store-chrome .store-head {
+  transition: height 0.28s ease;
+}
+.store-chrome .nav-row {
+  transition: height 0.28s ease;
+}
+.store-chrome .store-logo img,
+.store-chrome .store-logo {
+  transition: height 0.28s ease, width 0.28s ease, transform 0.28s ease, min-width 0.28s ease;
+}
+.store-chrome .store-search {
+  transition: height 0.28s ease;
+}
+.store-chrome .store-wa,
+.store-chrome .action-icon {
+  transition: min-height 0.28s ease, width 0.28s ease, height 0.28s ease, transform 0.28s ease;
+}
+
+/* Compact header while scrolling */
+.store-chrome.is-compact {
+  box-shadow: 0 8px 28px rgba(38, 8, 18, 0.12);
+}
+.store-chrome.is-compact .store-top {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateY(-100%);
+}
+.store-chrome.is-compact .store-head {
+  height: 62px;
+}
+.store-chrome.is-compact .nav-row {
+  height: 48px;
+}
+.store-chrome.is-compact .store-logo {
+  min-width: 170px;
+  transform: scale(0.9);
+  transform-origin: left center;
+}
+.store-chrome.is-compact .store-search {
+  height: 42px;
+}
+.store-chrome.is-compact .store-wa {
+  min-height: 40px;
+}
+.store-chrome.is-compact .action-icon {
+  width: 38px !important;
+  height: 38px;
+}
+.store-chrome.is-compact .mega,
+.store-chrome.is-compact .store-header .mega {
+  top: 110px;
+}
+
+/* In-flow spacer keeps page content below the fixed header.
+   Uses expanded height only so compacting the chrome cannot fight scrollY. */
+.store-chrome-spacer {
+  height: var(--store-chrome-spacer-h, var(--store-chrome-h, 180px));
+  flex: 0 0 auto;
+  pointer-events: none;
+}
+body {
+  padding-top: 0;
+}
+html {
+  scroll-padding-top: var(--store-chrome-h, 180px);
+}
+.plp-toolbar-wrap {
+  top: var(--store-chrome-h, 180px) !important;
+  transition: top 0.28s ease;
+}
+.pdp-gallery,
+.pdp-buy-panel {
+  top: calc(var(--store-chrome-h, 180px) + 16px) !important;
+}
+.checkout-progress {
+  top: var(--store-chrome-h, 180px) !important;
+}
+.filters {
+  top: calc(var(--store-chrome-h, 180px) + 16px) !important;
+}
+.account-lounge-nav {
+  top: var(--store-chrome-h, 180px) !important;
+  z-index: 40;
+}
+
+@media (max-width: 900px) {
+  .store-chrome.is-compact .store-head {
+    height: 58px;
+  }
+  .store-chrome.is-compact .store-logo {
+    min-width: 0;
+    transform: scale(0.92);
+  }
+}
+@media (max-width: 520px) {
+  .store-chrome.is-compact .store-head {
+    height: 54px;
+  }
 }

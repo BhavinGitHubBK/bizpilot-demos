@@ -140,20 +140,7 @@ a,a:link,a:visited,a:hover,a:active{text-decoration:none!important}
   font-size: 9px;
 }
 
-.wa-head {
-  min-height: 46px;
-  margin-left: 4px;
-  padding-inline: 18px;
-  border-radius: 13px;
-  background: linear-gradient(120deg, #4a1024, #6f1935);
-  box-shadow: 0 9px 22px rgba(74, 16, 36, 0.2);
-  transition: transform 0.22s, box-shadow 0.22s;
-}
-
-.wa-head:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 13px 27px rgba(74, 16, 36, 0.26);
-}
+/* Homepage WhatsApp control is styled as a luxury concierge pill in motion.css */
 
 .nav-row {
   height: 56px;
@@ -3516,7 +3503,9 @@ a,a:link,a:visited,a:hover,a:active{text-decoration:none!important}
 }
 
 .card-actions {
+  display: grid;
   grid-template-columns: 1fr 48px;
+  align-items: center;
   gap: 10px;
   margin-top: 9px;
 }
@@ -3538,7 +3527,10 @@ a,a:link,a:visited,a:hover,a:active{text-decoration:none!important}
 
 .card-actions a {
   position: relative;
+  width: 48px;
   height: 48px;
+  min-height: 48px;
+  align-self: center;
   display: grid;
   place-items: center;
   overflow: hidden;

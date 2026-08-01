@@ -43,7 +43,7 @@
   const revealSelector=[
     ".page-hero > *",".crumbs",".shop-toolbar",".filters",".store-card",
     ".product-detail > section",".pdp-gallery",".pdp-buy-panel",".pdp-tabs",
-    ".pdp-story > .store-shell > *",".pdp-complete-look > *",".pdp-reviews header",".pdp-review-grid article",
+    ".pdp-story-panel",".pdp-story-media",".pdp-complete-look > *",".pdp-reviews header",".pdp-review-grid article",
     ".cart-item",".cart-progress",".luxury-cart-summary",".cart-promise > *",
     ".cart-recommendations > *",".cart-testimonial > .store-shell",".summary-box",".checkout-card",
     ".account-card",".account-nav",".auth-card",".content-page > *",".faq details",
@@ -82,7 +82,7 @@
     ".editorial-card",".insta-card",".combo-grid article"
   ].join(",");
   const actionSelector=[
-    ".button",".btn","button:not(.motion-back-top)",".store-wa",".wa-head",
+    ".button",".btn","button:not(.motion-back-top):not(.zivara-alert-close):not(.zivara-alert-confirm)",".store-wa",".wa-head",
     ".card-actions a",".card-actions button",".account-quick-actions a",
     ".confirmation-actions a",".tracking-actions a"
   ].join(",");
