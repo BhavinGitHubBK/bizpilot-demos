@@ -136,20 +136,32 @@ function renderMobileDrawer(){
 function closeFocusedMenus(){
   $$(".fb-nav-dropdown.is-open").forEach(item=>{item.classList.remove("is-open");$("button[data-nav-trigger]",item)?.setAttribute("aria-expanded","false");});
 }
-function premiumLocationMarkup(modal,selected,fulfilment,recent,addresses){
+function premiumLocationMarkup(modal,selected,fulfillment,recent,addresses){
   $("#ui-modal-title",modal).textContent="Choose your location";
   $(".ui-modal-header",modal)?.insertAdjacentHTML("afterbegin",'<span class="fb-location-header-icon"><i class="fa-solid fa-location-dot"></i></span>');
-  const body=$(".ui-modal-body",modal);body.innerHTML=`<div class="fb-location-intro"><span><i class="fa-solid fa-location-dot"></i> Delivery preferences</span><p>Select where and how you would like your FreshBasket order delivered.</p></div><div class="fb-location-layout"><div class="fb-location-primary">
-    <button class="fb-detect-location" type="button" data-detect-location><i class="fa-solid fa-location-crosshairs"></i><span><b>Use current location</b><small>Detect your location for faster delivery availability</small></span><em>Detect <i class="fa-solid fa-arrow-right"></i></em></button>
-    <section class="fb-location-section"><div class="fb-location-section-head"><span>1</span><div><h3>Enter delivery area</h3><p>Check service availability using your PIN code.</p></div></div><div class="fb-pin-form"><div class="fb-location-input"><i class="fa-solid fa-location-dot"></i><input class="form-control" id="location-pin" inputmode="numeric" maxlength="6" value="${selected.pin||""}" placeholder="6-digit PIN" aria-describedby="location-note"></div><button class="btn btn-primary" type="button" data-check-pin>Check</button></div><label class="form-label" for="location-city">City</label><div class="fb-location-select"><i class="fa-solid fa-city"></i><select class="form-control" id="location-city">${CITIES.map(city=>`<option ${city===selected.city?"selected":""}>${city}</option>`).join("")}</select></div><p class="fb-location-note" id="location-note" aria-live="polite"></p></section>
-    <section class="fb-location-section"><div class="fb-location-section-head"><span>2</span><div><h3>Choose an Ahmedabad area</h3><p>Select a nearby delivery or pickup area.</p></div></div><div class="fb-area-grid">${AREAS.map(area=>`<label class="fb-area-card"><input type="radio" name="location-area" value="${area}" ${area===selected.area?"checked":""}><i class="fa-solid fa-location-dot"></i><span><b>${area}</b><small>Delivery today</small></span><em><i class="fa-solid fa-check"></i></em></label>`).join("")}</div></section>
-  </div><aside class="fb-location-secondary">
-    ${recent.length?`<section class="fb-location-side-section"><div class="fb-location-side-head"><h3><i class="fa-solid fa-clock-rotate-left"></i> Recent locations</h3></div><div class="fb-recent-list">${recent.slice(0,3).map(area=>`<button type="button" data-location-area="${area}"><i class="fa-solid fa-clock"></i>${area}<i class="fa-solid fa-chevron-right"></i></button>`).join("")}</div></section>`:""}
-    <section class="fb-location-side-section"><div class="fb-location-side-head"><h3><i class="fa-solid fa-address-book"></i> Saved addresses</h3><a href="addresses.html">Manage</a></div><div class="fb-saved-list">${addresses.slice(0,3).map(address=>`<button type="button" data-saved-location="${address.text||address.address||""}" data-saved-area="${address.area||selected.area}"><i class="fa-solid ${String(address.type).toLowerCase()==="work"?"fa-building":"fa-house"}"></i><span><b>${address.type||"Saved"}</b><small>${address.area||selected.area}, Ahmedabad</small><small>${address.text||address.address||"Saved delivery address"}</small></span>${address.default?'<em>Default</em>':""}</button>`).join("")||'<div class="fb-location-empty"><i class="fa-solid fa-house-circle-plus"></i><p>No saved addresses yet.</p><a href="addresses.html">Add address</a></div>'}</div></section>
-    <section class="fb-location-side-section"><div class="fb-location-side-head"><h3><i class="fa-solid fa-box"></i> Fulfilment type</h3></div><div class="fb-fulfilment-grid"><label><input type="radio" name="location-fulfilment" value="delivery" ${fulfilment==="delivery"?"checked":""}><i class="fa-solid fa-truck-fast"></i><span><b>Home delivery</b><small>Delivered to your address</small><em>Today, 7–9 PM</em></span><strong><i class="fa-solid fa-check"></i></strong></label><label><input type="radio" name="location-fulfilment" value="pickup" ${fulfilment==="pickup"?"checked":""}><i class="fa-solid fa-store"></i><span><b>Store pickup</b><small>Collect from nearest point</small><em>Free pickup</em></span><strong><i class="fa-solid fa-check"></i></strong></label></div></section>
-    <section class="fb-location-summary" aria-live="polite"><span>Your selection</span><div><i class="fa-solid fa-truck-fast" data-summary-icon></i><p><b data-summary-type>Home delivery</b><small data-summary-place>${selected.area}, ${selected.city} ${selected.pin||""}</small><small data-summary-time>Estimated: Today, 7–9 PM</small></p></div></section>
-  </aside></div>`;
-  $(".ui-modal-footer",modal).innerHTML='<span class="fb-location-footer-status"><i class="fa-solid fa-circle-check"></i> Ready to confirm</span><button class="btn btn-outline" type="button" data-modal-close>Cancel</button><button class="btn btn-primary" type="button" data-location-confirm>Confirm location <i class="fa-solid fa-arrow-right"></i></button>';
+  const saved=addresses.slice(0,2);
+  const body=$(".ui-modal-body",modal);
+  body.innerHTML=`<div class="fb-loc">
+    <div class="fb-loc-top">
+      <button class="fb-loc-detect" type="button" data-detect-location><i class="fa-solid fa-location-crosshairs"></i><span>Use current location</span><em>Detect</em></button>
+      <div class="fb-loc-mode" role="radiogroup" aria-label="Fulfilment type">
+        <label class="fb-loc-mode-card"><input type="radio" name="location-fulfillment" value="delivery" ${fulfillment==="delivery"?"checked":""}><i class="fa-solid fa-truck-fast"></i><span><b>Home delivery</b><small>Today, 7–9 PM</small></span></label>
+        <label class="fb-loc-mode-card"><input type="radio" name="location-fulfillment" value="pickup" ${fulfillment==="pickup"?"checked":""}><i class="fa-solid fa-store"></i><span><b>Store pickup</b><small>Free · Ready soon</small></span></label>
+      </div>
+    </div>
+    <div class="fb-loc-fields">
+      <div class="fb-loc-field"><label for="location-pin">PIN code</label><div class="fb-loc-pin"><input class="form-control" id="location-pin" inputmode="numeric" maxlength="6" value="${selected.pin||""}" placeholder="6-digit PIN" aria-describedby="location-note"><button class="btn btn-primary" type="button" data-check-pin>Check</button></div></div>
+      <div class="fb-loc-field"><label for="location-city">City</label><select class="form-control" id="location-city">${CITIES.map(city=>`<option ${city===selected.city?"selected":""}>${city}</option>`).join("")}</select></div>
+    </div>
+    <p class="fb-location-note" id="location-note" aria-live="polite"></p>
+    <div class="fb-loc-block"><div class="fb-loc-block-head"><h3>Areas in Ahmedabad</h3><small>Delivery today</small></div><div class="fb-loc-areas">${AREAS.map(area=>`<label class="fb-loc-chip"><input type="radio" name="location-area" value="${area}" ${area===selected.area?"checked":""}><span>${area}</span></label>`).join("")}</div></div>
+    <div class="fb-loc-meta">
+      ${recent.length?`<div class="fb-loc-block"><div class="fb-loc-block-head"><h3>Recent</h3></div><div class="fb-loc-recent">${recent.slice(0,3).map(area=>`<button type="button" data-location-area="${area}">${area}</button>`).join("")}</div></div>`:""}
+      <div class="fb-loc-block"><div class="fb-loc-block-head"><h3>Saved</h3><a href="addresses.html">Manage</a></div><div class="fb-loc-saved">${saved.map(address=>`<button type="button" data-saved-location="${address.text||address.address||""}" data-saved-area="${address.area||selected.area}"><i class="fa-solid ${String(address.type).toLowerCase()==="work"?"fa-building":"fa-house"}"></i><span><b>${address.type||"Saved"}</b><small>${address.area||selected.area}</small></span>${address.default?'<em>Default</em>':""}</button>`).join("")||'<a class="fb-loc-empty" href="addresses.html">Add a saved address</a>'}</div></div>
+    </div>
+    <div class="fb-loc-summary" aria-live="polite"><i class="fa-solid fa-truck-fast" data-summary-icon></i><div><b data-summary-type>${fulfillment==="pickup"?"Store pickup":"Home delivery"}</b><small data-summary-place>${selected.area}, ${selected.city} ${selected.pin||""}</small></div><span data-summary-time>${fulfillment==="pickup"?"Free pickup":"Today, 7–9 PM"}</span></div>
+  </div>`;
+  $(".ui-modal-footer",modal).innerHTML='<button class="btn btn-outline" type="button" data-modal-close>Cancel</button><button class="btn btn-primary" type="button" data-location-confirm>Confirm location <i class="fa-solid fa-arrow-right"></i></button>';
 }
 function openMobile(){
   $(".fb-mobile-drawer")?.classList.add("is-open");$(".fb-mobile-backdrop")?.classList.add("is-open");$(".fb-mobile-drawer")?.setAttribute("aria-hidden","false");$("[data-mobile-open]")?.setAttribute("aria-expanded","true");document.body.classList.add("scroll-lock");window.setTimeout(()=>$("[data-mobile-close]")?.focus(),30);
@@ -171,16 +183,31 @@ function openLocation(preferPickup=false){
     <div class="fb-location-full"><label class="form-label">Fulfilment type</label><div class="fb-choice-list"><label class="fb-choice"><input type="radio" name="location-fulfilment" value="delivery" ${fulfilment==="delivery"?"checked":""}><i class="fa-solid fa-truck-fast"></i> Home delivery</label><label class="fb-choice"><input type="radio" name="location-fulfilment" value="pickup" ${fulfilment==="pickup"?"checked":""}><i class="fa-solid fa-store"></i> Pickup</label></div></div>
   </div>`,footer:'<button class="btn btn-outline" type="button" data-modal-close>Cancel</button><button class="btn btn-primary" type="button" data-location-confirm>Confirm location</button>'});
   modal.classList.add("fb-location-modal");
-  premiumLocationMarkup(modal,selected,fulfilment,recent,addresses);
-  const choose=area=>{const radio=$(`input[name="location-area"][value="${area}"]`,modal);if(radio)radio.checked=true;};
+  premiumLocationMarkup(modal,selected,fulfillment,recent,addresses);
+  const syncSummary=()=>{
+    const area=$('input[name="location-area"]:checked',modal)?.value||selected.area;
+    const city=$("#location-city",modal)?.value||selected.city;
+    const pin=$("#location-pin",modal)?.value.trim()||selected.pin||"";
+    const type=$('input[name="location-fulfillment"]:checked',modal)?.value||"delivery";
+    const pickup=type==="pickup";
+    const icon=$("[data-summary-icon]",modal),typeNode=$("[data-summary-type]",modal),place=$("[data-summary-place]",modal),time=$("[data-summary-time]",modal);
+    if(icon)icon.className=`fa-solid ${pickup?"fa-store":"fa-truck-fast"}`;
+    if(typeNode)typeNode.textContent=pickup?"Store pickup":"Home delivery";
+    if(place)place.textContent=`${area}, ${city}${pin?` ${pin}`:""}`;
+    if(time)time.textContent=pickup?"Free pickup":"Today, 7–9 PM";
+  };
+  const choose=area=>{const radio=$(`input[name="location-area"][value="${area}"]`,modal);if(radio){radio.checked=true;syncSummary();}};
   $$("[data-location-area]",modal).forEach(button=>button.onclick=()=>choose(button.dataset.locationArea));
   $$("[data-saved-location]",modal).forEach(button=>button.onclick=()=>choose(button.dataset.savedArea));
-  $("[data-check-pin]",modal).onclick=()=>{const pin=$("#location-pin",modal).value.trim(),note=$("#location-note",modal);note.textContent=/^\d{6}$/.test(pin)?"PIN code is available for delivery.":"Enter a valid 6-digit PIN code.";note.style.color=/^\d{6}$/.test(pin)?"#16803b":"var(--red)";};
-  $("[data-detect-location]",modal).onclick=()=>{const note=$("#location-note",modal);note.textContent="Detecting your location…";if(!navigator.geolocation){note.textContent="Location detection is not supported. Choose an area below.";return;}navigator.geolocation.getCurrentPosition(()=>{choose("Satellite");note.textContent="Location detected near Satellite, Ahmedabad.";},()=>{note.textContent="Location permission was unavailable. Choose an area below.";},{timeout:5000});};
+  $$('input[name="location-area"],input[name="location-fulfillment"]',modal).forEach(input=>input.addEventListener("change",syncSummary));
+  $("#location-city",modal)?.addEventListener("change",syncSummary);
+  $("#location-pin",modal)?.addEventListener("input",syncSummary);
+  $("[data-check-pin]",modal).onclick=()=>{const pin=$("#location-pin",modal).value.trim(),note=$("#location-note",modal);note.textContent=/^\d{6}$/.test(pin)?"PIN available for delivery.":"Enter a valid 6-digit PIN.";note.style.color=/^\d{6}$/.test(pin)?"#16803b":"var(--red)";syncSummary();};
+  $("[data-detect-location]",modal).onclick=()=>{const note=$("#location-note",modal);note.textContent="Detecting your location…";if(!navigator.geolocation){note.textContent="Location detection unavailable. Choose an area.";return;}navigator.geolocation.getCurrentPosition(()=>{choose("Satellite");note.textContent="Detected near Satellite, Ahmedabad.";},()=>{note.textContent="Location permission unavailable. Choose an area.";},{timeout:5000});};
   $("[data-location-confirm]",modal).onclick=()=>{
     const area=$('input[name="location-area"]:checked',modal)?.value||selected.area,city=$("#location-city",modal).value,pin=$("#location-pin",modal).value.trim()||selected.pin;
-    const type=$('input[name="location-fulfilment"]:checked',modal)?.value||"delivery";
-    store.set("fb-location",{area,city,pin,label:`${area}, ${city}${pin?` ${pin}`:""}`});store.set("fb-fulfilment",type);
+    const type=$('input[name="location-fulfillment"]:checked',modal)?.value||"delivery";
+    store.set("fb-location",{area,city,pin,label:`${area}, ${city}${pin?` ${pin}`:""}`});store.set("fb-fulfillment",type);
     store.set("fb-recent-locations",[area,...recent.filter(item=>item!==area)].slice(0,4));window.FBUI.closeModal(modal);updateLocation();window.FBUI.toast(`${type==="pickup"?"Pickup":"Delivery"} location updated`);
   };
 }

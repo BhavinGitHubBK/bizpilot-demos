@@ -111,6 +111,10 @@ textarea:focus-visible {
   transform: translateY(12px);
   transition: transform var(--transition-fast);
 }
+.ui-modal.fb-location-modal {
+  max-height: none;
+  overflow: hidden;
+}
 .ui-overlay.is-open .ui-modal { transform: translateY(0); }
 .ui-modal-header,
 .ui-modal-body,
