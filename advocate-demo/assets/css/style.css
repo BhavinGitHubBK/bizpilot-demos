@@ -506,7 +506,7 @@ body{background:linear-gradient(180deg,#f8f8f6,#eef1f4);background-attachment:fi
 .journal-rail article>div:not(.journal-card-image)>a{margin:auto 0 0;padding-left:17px;padding-right:17px}
 @media(max-width:640px){.journal-rail article>div:not(.journal-card-image){min-height:auto;padding:30px 27px 26px}.journal-rail article>div:not(.journal-card-image):before{right:27px;top:29px}}
 
-/* Legal Journal spacing rhythm — layout polish only */
+/* Legal Journal spacing rhythm - layout polish only */
 .journal-rail{align-items:stretch}
 .journal-rail article{height:100%;display:flex;flex-direction:column;box-shadow:0 14px 30px rgba(7,18,38,.08),0 28px 60px rgba(7,18,38,.08),inset 0 1px rgba(255,255,255,.95)}
 .journal-rail .journal-card-image{flex:0 0 205px;margin-bottom:0}
@@ -947,7 +947,7 @@ body{background:linear-gradient(180deg,#f8f8f6,#eef1f4);background-attachment:fi
   }
 }
 
-/* Refined editorial navigation — clean, restrained and spacious */
+/* Refined editorial navigation - clean, restrained and spacious */
 @media(min-width:901px){
   .navbar .nav-links{
     gap:29px;

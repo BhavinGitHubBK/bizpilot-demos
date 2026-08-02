@@ -80,7 +80,7 @@
       compactGroup(group, 5);
       if (title === "price") {
         const content = $(".catalog-filter-content", group);
-        content?.insertAdjacentHTML("afterbegin", `<div class="catalog-price-summary" data-price-summary>₹0 — ₹5,000</div><div class="catalog-dual-range"><input type="range" min="0" max="5000" step="50" value="0" data-range-min aria-label="Minimum price"><input type="range" min="0" max="5000" step="50" value="5000" data-range-max aria-label="Maximum price"></div>`);
+        content?.insertAdjacentHTML("afterbegin", `<div class="catalog-price-summary" data-price-summary>₹0 - ₹5,000</div><div class="catalog-dual-range"><input type="range" min="0" max="5000" step="50" value="0" data-range-min aria-label="Minimum price"><input type="range" min="0" max="5000" step="50" value="5000" data-range-max aria-label="Maximum price"></div>`);
       }
       const stored = sessionStorage.getItem(`fb-filter-group-${title}`);
       if (stored !== null) {
@@ -176,7 +176,7 @@
     if (apply) apply.textContent = `Show ${($("#catalog-count")?.textContent.match(/\d+/) || [0])[0]} products`;
     const sheet = $("#catalog-filter-sheet"), title = $(".catalog-sheet-title");
     if (sheet?.dataset.sheet === "filter" && title) title.innerHTML = `Filters <span class="catalog-mobile-count">${count}</span>`;
-    $$("[data-price-summary]").forEach(node => node.textContent = `₹${state.minPrice.toLocaleString("en-IN")} — ₹${state.maxPrice.toLocaleString("en-IN")}`);
+    $$("[data-price-summary]").forEach(node => node.textContent = `₹${state.minPrice.toLocaleString("en-IN")} - ₹${state.maxPrice.toLocaleString("en-IN")}`);
     $$("[data-range-min]").forEach(node => node.value = state.minPrice);
     $$("[data-range-max]").forEach(node => node.value = state.maxPrice);
   }

@@ -4235,7 +4235,7 @@ a,a:link,a:visited,a:hover,a:active{text-decoration:none!important}
 @media(max-width:680px){.luxury-footer{padding-top:65px;padding-bottom:90px}.luxury-footer .footer-grid{grid-template-columns:1fr 1fr;gap:34px 20px}.footer-brand-column{grid-column:1/-1;grid-row:auto;max-width:none;text-align:center}.luxury-footer .footer-brand{justify-content:center}.luxury-footer .footer-brand:after{display:none}.footer-brand-column>p{margin-inline:auto}.footer-rating,.luxury-footer .socials{justify-content:center}.luxury-footer .footer-grid h3{font-size:18px}.luxury-footer .footer-grid nav>a{min-height:29px}.footer-support-card{display:none}.footer-trust{flex-wrap:wrap}.footer-trust>span{width:calc(50% - 10px)}.payment-badges{width:100%;margin:8px 0 0}.luxury-footer .footer-bottom{grid-template-columns:1fr auto}.luxury-footer .footer-bottom nav{grid-column:1/-1;grid-row:2}.luxury-footer .footer-bottom>small{grid-row:3}.luxury-footer .footer-bottom p span{display:none}}
 @media(prefers-reduced-motion:reduce){.footer-glow,.luxury-footer .socials a,#footerTop{animation:none;transition:none}}
 
-/* Minimal 2026 editorial footer — intentionally free of visible patterns */
+/* Minimal 2026 editorial footer - intentionally free of visible patterns */
 .site-footer.editorial-footer{position:relative;display:block;width:100%;margin:0;padding:84px 0 26px;border:0;border-radius:0;gap:0;align-items:initial;background:radial-gradient(circle at 16% 20%,#512033 0,transparent 30%),radial-gradient(circle at 88% 74%,#3b1424 0,transparent 26%),#2b0815;color:#d8c7c7;overflow:hidden}
 .site-footer.editorial-footer:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#ffffff05,transparent 22%);pointer-events:none}
 .editorial-footer-main{position:relative;display:grid;grid-template-columns:1.65fr repeat(3,.72fr);gap:clamp(44px,6vw,92px);align-items:start;padding-bottom:54px}
@@ -4255,7 +4255,7 @@ a,a:link,a:visited,a:hover,a:active{text-decoration:none!important}
 @media(max-width:650px){.site-footer.editorial-footer{padding:66px 0 90px}.editorial-footer-main{grid-template-columns:1fr 1fr;gap:42px 24px}.editorial-footer-brand{grid-column:1/-1;grid-row:auto;max-width:none;text-align:center}.footer-wordmark{align-items:center}.editorial-footer-brand>p{margin-inline:auto}.editorial-rating,.editorial-socials{justify-content:center}.editorial-footer-links h3{font-size:18px}.editorial-footer-links a{min-height:29px}.editorial-footer-links:last-child{grid-column:auto}.footer-account-utility{justify-content:center;flex-wrap:wrap;gap:14px 20px}.footer-account-utility span{width:100%;margin:0;text-align:center}.editorial-trust{grid-template-columns:1fr 1fr}.editorial-trust span:last-child{grid-column:1/-1}.editorial-footer-bottom{grid-template-columns:1fr auto}.editorial-footer-bottom p span{display:none}.editorial-footer-bottom nav{grid-column:1/-1}.editorial-payments{overflow-x:auto;justify-content:flex-start;max-width:100%;padding-bottom:4px}}
 @media(prefers-reduced-motion:reduce){.editorial-socials a,.editorial-footer-links a,.site-footer.editorial-footer #footerTop{transition:none}}
 
-/* Premium footer — stronger hierarchy and readable utility content */
+/* Premium footer - stronger hierarchy and readable utility content */
 .site-footer.editorial-footer{
   padding:72px 0 28px;
   background:
@@ -4424,7 +4424,7 @@ a,a:link,a:visited,a:hover,a:active{text-decoration:none!important}
   .site-footer .editorial-footer-bottom{gap:18px}
 }
 
-/* 2026 luxury editorial footer — compact styles live in assets/css/luxury-footer.css */
+/* 2026 luxury editorial footer - compact styles live in assets/css/luxury-footer.css */
 .site-footer.editorial-footer{display:none}
 body:has(.luxury-editorial-footer) .motion-back-top{display:none}
 

@@ -1,6 +1,6 @@
 html, body { max-width: 100%; overflow-x: hidden; }
 
-/* Compact delivery-location modal — no scrollbar */
+/* Compact delivery-location modal - no scrollbar */
 .ui-overlay:has(.fb-location-modal){padding:18px;background:rgba(8,30,17,.58);backdrop-filter:blur(8px)}
 .ui-modal.fb-location-modal{
   width:min(640px,calc(100vw - 36px));

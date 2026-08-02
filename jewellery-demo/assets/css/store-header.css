@@ -2,7 +2,7 @@
 @media(max-width:1100px){.store-logo{min-width:175px}.store-search-wrap{max-width:390px}.store-wa span{display:none}.store-wa{width:45px;padding:0!important;display:grid!important;place-items:center}.nav-row{gap:20px}}
 @media(max-width:900px){.store-head{height:70px}.store-menu-toggle{display:grid!important}.store-search-wrap{display:none}.store-logo{min-width:0;margin-right:auto}.nav-row{display:none}.store-wa{display:none!important}.mobile-search-row{display:block;padding:10px 0;border-top:1px solid var(--line)}.mobile-search-row form{display:flex;height:44px;border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}.mobile-search-row input{flex:1;min-width:0;border:0;padding:0 14px}.mobile-search-row button{border:0;background:var(--wine);color:#fff;padding:0 17px}.store-icons{margin-left:0}}
 
-/* Luxury WhatsApp concierge — refined in motion.css; keep compact breakpoint here */
+/* Luxury WhatsApp concierge - refined in motion.css; keep compact breakpoint here */
 @media(max-width:1100px){
   .store-wa{width:50px;min-height:50px;margin-left:5px;padding:0!important;border-radius:50%!important}
   .store-head .store-wa .wa-copy{display:none}

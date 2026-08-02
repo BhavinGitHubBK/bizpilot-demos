@@ -22,7 +22,7 @@ function addToCart(id,quantity=1){
   const list=cart(),existing=list.find(entry=>entry.id===item.id);
   const next=Math.min(item.stock,(existing?.qty||0)+Math.max(1,Number(quantity)||1));
   if(existing)existing.qty=next;else list.push({id:item.id,qty:next});
-  saveCart(list);ui.toast(next===item.stock?"Added — maximum available quantity reached":"Added to your basket");renderCurrent();return true;
+  saveCart(list);ui.toast(next===item.stock?"Added - maximum available quantity reached":"Added to your basket");renderCurrent();return true;
 }
 function removeCart(id){saveCart(cart().filter(item=>item.id!==Number(id)));ui.toast("Removed from basket");renderCurrent();}
 function changeQuantity(id,delta){

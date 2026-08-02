@@ -84,7 +84,7 @@
 @media(max-width:1050px){.account-hero>.store-shell{grid-template-columns:auto 1fr .65fr}}
 @media(max-width:700px){.account-hero>.store-shell{min-height:185px;grid-template-columns:58px 1fr;gap:11px}.account-avatar{width:58px;height:58px;font-size:20px}.account-welcome h1{font-size:32px}.account-hero-reward{padding:10px 12px}}
 
-/* Premium member navigation — upgraded track + sliding pill */
+/* Premium member navigation - upgraded track + sliding pill */
 .account-lounge-nav{
   position:sticky;
   top:var(--store-chrome-h, 180px);
@@ -367,7 +367,7 @@
 @media(max-width:980px){.lounge-orders article{grid-template-columns:105px minmax(0,1fr) auto}.lounge-orders article>a img{width:105px;height:108px}.lounge-orders article>aside{grid-column:2/-1;display:grid;grid-template-columns:repeat(3,1fr)}}
 @media(max-width:700px){.lounge-orders{padding:18px}.lounge-orders>header h2{font-size:30px}.lounge-orders article{grid-template-columns:82px minmax(0,1fr);gap:12px;padding:12px}.lounge-orders article>a img{width:82px;height:90px}.lounge-orders article h3{font-size:16px}.lounge-orders article>strong{grid-column:2;justify-self:start}.lounge-orders article>aside{grid-column:1/-1}}
 
-/* Personal assistance card — readable premium treatment */
+/* Personal assistance card - readable premium treatment */
 .lounge-page-help{
   overflow:hidden;
   padding:28px;

@@ -77,7 +77,7 @@
     $$(".pd-offer").forEach(offer => {
       const code = $("b", offer)?.textContent.trim();
       if (!code) return;
-      const benefit = offer.textContent.replace(code, "").replace(/^[\s—-]+/, "");
+      const benefit = offer.textContent.replace(code, "").replace(/^[\s--]+/, "");
       offer.innerHTML = `<i class="fa-solid fa-ticket"></i><span><b>${code}</b><small>${benefit}</small></span><button type="button" data-copy-offer="${code}">Copy</button>`;
     });
     document.addEventListener("click", event => {
